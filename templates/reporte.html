@@ -61,6 +61,7 @@
         }
         .col-sku { width: 120px; font-weight: bold; color: #ff2688; }
         .col-qty { width: 95px; text-align: center; font-weight: bold; font-size: 10pt; }
+        .qty-out { color: #dc2626; background-color: #fef2f2; }
         .notas {
             margin-top: 20px;
             padding: 10px 14px;
@@ -94,7 +95,7 @@
             <tr>
                 <td class="col-sku">{{ item.sku }}</td>
                 <td>{{ item.name }}</td>
-                <td class="col-qty">{{ item.qty }}</td>
+                <td class="col-qty {% if item.qty == -1 %}qty-out{% endif %}">{{ item.qty }}</td>
             </tr>
             {% endfor %}
         </tbody>
