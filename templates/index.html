@@ -10,7 +10,7 @@
             margin: 0;
             background: #090d16;
             color: #f1f5f9;
-            padding-bottom: 135px;
+            padding-bottom: 145px;
         }
 
         /* Pantalla de Login */
@@ -76,18 +76,19 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            gap: 8px;
         }
         .header-top h1 { margin: 0; font-size: 17px; color: #ff2688; }
-        .header-right { display: flex; align-items: center; gap: 8px; }
-        .header-meta { font-size: 11px; color: #94a3b8; }
+        .header-right { display: flex; align-items: center; gap: 6px; }
+        .header-meta { font-size: 11px; color: #94a3b8; display: block; }
         .btn-icon-top {
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #334155;
             border-radius: 6px;
-            padding: 5px 9px;
+            padding: 6px 9px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
         }
         .btn-danger-top {
@@ -114,13 +115,13 @@
         }
         .filter-btn {
             flex: 1;
-            padding: 6px 10px;
+            padding: 8px 10px;
             border-radius: 6px;
             border: 1px solid #334155;
             background: #1e293b;
             color: #94a3b8;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 12.5px;
+            font-weight: 700;
             cursor: pointer;
         }
         .filter-btn.active {
@@ -128,6 +129,24 @@
             border-color: #ff2688;
             color: #fff;
         }
+
+        /* Barra Nuevo Producto en Pendientes */
+        #pending-toolbar {
+            display: none;
+            margin-bottom: 12px;
+        }
+        .btn-new-pending {
+            width: 100%;
+            padding: 11px;
+            background: #0284c7;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+        }
+        .btn-new-pending:hover { background: #0369a1; }
 
         /* Lista de productos */
         .container {
@@ -142,7 +161,7 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 11px;
+            gap: 10px;
             border: 1px solid #1e293b;
             transition: border-color 0.2s, background 0.2s;
         }
@@ -150,9 +169,13 @@
             border-color: #10b981;
             background: #06281e;
         }
+        .card.is-out {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+        }
         .card img {
-            width: 58px;
-            height: 58px;
+            width: 54px;
+            height: 54px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #334155;
@@ -164,6 +187,13 @@
             flex: 1;
             min-width: 0;
         }
+        .sku-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
         .sku {
             display: inline-block;
             font-size: 11px;
@@ -172,7 +202,14 @@
             background: rgba(255, 38, 136, 0.15);
             padding: 2px 6px;
             border-radius: 4px;
-            margin-bottom: 4px;
+        }
+        .badge-out {
+            font-size: 10px;
+            font-weight: 800;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
         .name {
             font-size: 13px;
@@ -184,7 +221,7 @@
         .card-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .qty-box {
             display: flex;
@@ -199,39 +236,66 @@
             text-transform: uppercase;
         }
         .qty-input {
-            width: 68px;
+            width: 62px;
             height: 40px;
             text-align: center;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             border: 1px solid #334155;
             border-radius: 8px;
             background: #1e293b;
             color: #fff;
         }
+        .qty-input.input-out {
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
         .qty-input:focus {
             border-color: #ff2688;
             outline: none;
         }
-        .btn-del-item {
-            background: rgba(239, 68, 68, 0.12);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.25);
+        .action-icon-btn {
             border-radius: 8px;
-            width: 30px;
+            width: 32px;
             height: 40px;
             margin-top: 13px;
             cursor: pointer;
             font-weight: bold;
             font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-out-item {
+            background: rgba(239, 68, 68, 0.14);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .btn-out-item.active, .btn-out-item:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-edit-item {
+            background: rgba(2, 132, 199, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(2, 132, 199, 0.3);
+        }
+        .btn-edit-item:hover {
+            background: #0284c7;
+            color: #fff;
+        }
+        .btn-del-item {
+            background: rgba(148, 163, 184, 0.12);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.25);
         }
         .btn-del-item:hover {
-            background: #ef4444;
+            background: #475569;
             color: #fff;
         }
         .empty-state {
             text-align: center;
-            padding: 50px 20px;
+            padding: 45px 20px;
             color: #64748b;
         }
 
@@ -241,7 +305,7 @@
             bottom: 0; left: 0; right: 0;
             background: #111827;
             border-top: 1px solid #1e293b;
-            padding: 12px 16px;
+            padding: 10px 14px;
             z-index: 100;
         }
         .bottom-inner {
@@ -263,36 +327,52 @@
         }
         .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         .btn-reset {
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #334155;
-            padding: 12px 12px;
+            padding: 11px 10px;
             border-radius: 8px;
             font-weight: 700;
             font-size: 12px;
             cursor: pointer;
+        }
+        .btn-save {
+            background: #10b981;
+            color: #06281e;
+            border: none;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-save.unsaved {
+            background: #f59e0b;
+            color: #111827;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
         }
         .btn-pdf {
             flex: 1;
             background: #ff2688;
             color: #fff;
             border: none;
-            padding: 12px 16px;
+            padding: 11px 14px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13.5px;
             cursor: pointer;
         }
-        .btn-pdf:disabled { background: #334155; color: #64748b; }
+        .btn-pdf:disabled, .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* Modal Lightbox Imagen */
-        #img-lightbox {
+        /* Modales (Lightbox + Form Pendiente) */
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.88);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(4px);
             z-index: 10000;
             display: none;
@@ -300,6 +380,33 @@
             justify-content: center;
             padding: 20px;
         }
+        .modal-card {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .modal-card h3 { margin: 0 0 14px 0; color: #ff2688; font-size: 16px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; font-weight: 600; }
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .form-group input:focus { border-color: #ff2688; }
+        .modal-btns { display: flex; gap: 8px; margin-top: 16px; }
+        .modal-btns button { flex: 1; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; }
+        .btn-cancel-modal { background: #1e293b; color: #cbd5e1; }
+        .btn-confirm-modal { background: #ff2688; color: #fff; }
+
         .lightbox-box {
             position: relative;
             max-width: 92vw;
@@ -328,7 +435,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -346,10 +452,33 @@
 </div>
 
 <!-- Lightbox Vista Previa de Imagen -->
-<div id="img-lightbox">
+<div id="img-lightbox" class="modal-overlay">
     <div class="lightbox-box">
         <button id="lightbox-close" title="Cerrar">✕</button>
         <img id="lightbox-img" src="" alt="Vista previa">
+    </div>
+</div>
+
+<!-- Modal Agregar / Editar Producto Pendiente -->
+<div id="pending-modal" class="modal-overlay">
+    <div class="modal-card">
+        <h3 id="pending-modal-title">+ Nuevo Producto Pendiente</h3>
+        <div class="form-group">
+            <label>Nombre del Producto *</label>
+            <input type="text" id="pend-name" placeholder="Ej: Rubor Líquido Bloomshell Tono 02">
+        </div>
+        <div class="form-group">
+            <label>SKU / Código *</label>
+            <input type="text" id="pend-sku" placeholder="Ej: BL-RUB02">
+        </div>
+        <div class="form-group">
+            <label>Cantidad (-1 = Agotado)</label>
+            <input type="number" id="pend-qty" value="0" min="-1">
+        </div>
+        <div class="modal-btns">
+            <button class="btn-cancel-modal" id="pend-cancel">Cancelar</button>
+            <button class="btn-confirm-modal" id="pend-save">Guardar Producto</button>
+        </div>
     </div>
 </div>
 
@@ -360,38 +489,60 @@
             <span class="header-meta" id="sync-info">Cargando...</span>
         </div>
         <div class="header-right">
-            <button class="btn-icon-top btn-danger-top" id="btn-clear-page">Limpiar página</button>
+            <button class="btn-icon-top btn-danger-top" id="btn-clear-page">Limpiar web</button>
             <button class="btn-icon-top" id="btn-logout" title="Bloquear">🔒</button>
         </div>
     </div>
     <input type="search" id="search-input" placeholder="Buscar por nombre o SKU...">
     <div class="filter-bar">
-        <button class="filter-btn active" id="filter-all">Todos (<span id="count-all">0</span>)</button>
-        <button class="filter-btn" id="filter-counted">Con cantidad (<span id="count-counted">0</span>)</button>
+        <button class="filter-btn active" id="tab-catalog">Catálogo Web (<span id="count-all">0</span>)</button>
+        <button class="filter-btn" id="tab-pending">Pendientes (<span id="count-pending">0</span>)</button>
     </div>
 </header>
 
-<div class="container" id="product-list"></div>
+<div class="container">
+    <div id="pending-toolbar">
+        <button class="btn-new-pending" id="btn-open-new-pending">+ Nuevo Producto Manual</button>
+    </div>
+    <div id="product-list"></div>
+</div>
 
 <div class="bottom-bar">
     <div class="bottom-inner">
         <input type="text" id="notas-input" placeholder="Observaciones del reporte (opcional)...">
         <div class="actions">
-            <button class="btn-reset" id="btn-reset">Cantidades a 0</button>
-            <button class="btn-pdf" id="btn-export">📄 Exportar PDF (<span id="btn-count">0</span>)</button>
+            <button class="btn-reset" id="btn-reset" title="Poner cantidades de esta pestaña en 0">Reset 0</button>
+            <button class="btn-save" id="btn-save-state">💾 Guardar</button>
+            <button class="btn-pdf" id="btn-export">📄 PDF (<span id="btn-count">0</span>)</button>
         </div>
     </div>
 </div>
 
 <script>
     const PASS_STORAGE_KEY = 'dumashe_app_password';
-    const LOCAL_QTY_KEY = 'dumashe_mobile_quantities';
     let appPassword = localStorage.getItem(PASS_STORAGE_KEY) || '';
     let catalog = [];
-    let quantities = JSON.parse(localStorage.getItem(LOCAL_QTY_KEY)) || {};
-    let filterMode = 'all';
+    let pendientes = [];
+    let activeTab = 'catalog'; // 'catalog' | 'pending'
+    let hasUnsavedChanges = false;
+    let editingPendingIndex = null;
 
-    // --- AUTENTICACIÓN ---
+    function markUnsaved(flag = true) {
+        hasUnsavedChanges = flag;
+        const saveBtn = document.getElementById('btn-save-state');
+        if (flag) {
+            saveBtn.classList.add('unsaved');
+            saveBtn.textContent = '💾 Guardar *';
+        } else {
+            saveBtn.classList.remove('unsaved');
+            saveBtn.textContent = '💾 Guardado';
+            setTimeout(() => {
+                if (!hasUnsavedChanges) saveBtn.textContent = '💾 Guardar';
+            }, 1800);
+        }
+    }
+
+    // --- AUTENTICACIÓN Y CARGA DESDE SERVIDOR ---
     async function checkAuthAndLoad() {
         if (!appPassword) {
             document.getElementById('login-screen').style.display = 'flex';
@@ -410,15 +561,45 @@
             const data = await res.json();
             document.getElementById('login-screen').style.display = 'none';
             catalog = data.items || [];
+            pendientes = data.pendientes || [];
             document.getElementById('sync-info').textContent = data.updated_at
-                ? `Sincronizado: ${data.updated_at}`
-                : 'Página en blanco';
+                ? `Guardado: ${data.updated_at}`
+                : 'Sin datos guardados';
+            markUnsaved(false);
             renderList();
         } catch (err) {
             document.getElementById('product-list').innerHTML =
                 '<div class="empty-state">Error de conexión con el servidor.</div>';
         }
     }
+
+    async function persistStateToServer(silent = false) {
+        const saveBtn = document.getElementById('btn-save-state');
+        saveBtn.disabled = true;
+        saveBtn.textContent = '⏳...';
+
+        try {
+            const res = await fetch('/api/save-state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-App-Password': appPassword
+                },
+                body: JSON.stringify({ items: catalog, pendientes: pendientes })
+            });
+
+            if (!res.ok) throw new Error('Error guardando');
+            const data = await res.json();
+            document.getElementById('sync-info').textContent = `Guardado: ${data.updated_at}`;
+            markUnsaved(false);
+        } catch (e) {
+            if (!silent) alert('Error al guardar cambios en el servidor.');
+        } finally {
+            saveBtn.disabled = false;
+        }
+    }
+
+    document.getElementById('btn-save-state').addEventListener('click', () => persistStateToServer(false));
 
     async function handleLogin() {
         const inputPass = document.getElementById('password-input').value.trim();
@@ -461,50 +642,208 @@
         lightbox.style.display = 'flex';
     }
 
-    document.getElementById('lightbox-close').addEventListener('click', () => {
-        lightbox.style.display = 'none';
-    });
+    document.getElementById('lightbox-close').addEventListener('click', () => lightbox.style.display = 'none');
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) lightbox.style.display = 'none';
     });
 
-    // --- GESTIÓN DE CANTIDADES Y PRODUCTOS ---
-    function saveQuantities() {
-        localStorage.setItem(LOCAL_QTY_KEY, JSON.stringify(quantities));
-        updateCounters();
-    }
-
+    // --- CONTADORES ---
     function updateCounters() {
-        let counted = 0;
-        catalog.forEach(item => {
-            const key = item.sku + '||' + item.name;
-            if ((quantities[key] || 0) > 0) counted++;
-        });
         document.getElementById('count-all').textContent = catalog.length;
-        document.getElementById('count-counted').textContent = counted;
-        document.getElementById('btn-count').textContent = counted;
+        document.getElementById('count-pending').textContent = pendientes.length;
+
+        const currentList = activeTab === 'catalog' ? catalog : pendientes;
+        // Se exportan los productos con cantidad > 0 O marcados como agotados (-1)
+        const exportableCount = currentList.filter(i => (i.qty || 0) > 0 || i.qty === -1).length;
+        document.getElementById('btn-count').textContent = exportableCount;
     }
 
-    async function deleteSingleProduct(item, key) {
-        if (!confirm(`¿Eliminar "${item.name}" de la lista?`)) return;
+    // --- RENDERIZADO DE LISTA ---
+    function renderList() {
+        const container = document.getElementById('product-list');
+        const query = document.getElementById('search-input').value.toLowerCase().trim();
+        const pendingToolbar = document.getElementById('pending-toolbar');
 
-        await fetch('/api/catalog/delete-item', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-App-Password': appPassword
-            },
-            body: JSON.stringify({ sku: item.sku, name: item.name })
+        pendingToolbar.style.display = activeTab === 'pending' ? 'block' : 'none';
+        updateCounters();
+
+        const sourceList = activeTab === 'catalog' ? catalog : pendientes;
+
+        if (sourceList.length === 0) {
+            container.innerHTML = activeTab === 'catalog'
+                ? `<div class="empty-state"><h3>Catálogo en blanco</h3><p>Envía productos desde Tampermonkey en tu PC para empezar.</p></div>`
+                : `<div class="empty-state"><h3>Sin productos pendientes</h3><p>Usa el botón <b>"+ Nuevo Producto Manual"</b> para agregar referencias que aún no están en la web.</p></div>`;
+            return;
+        }
+
+        const filtered = sourceList
+            .map((item, originalIndex) => ({ item, originalIndex }))
+            .filter(({ item }) =>
+                item.name.toLowerCase().includes(query) ||
+                item.sku.toLowerCase().includes(query)
+            );
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="empty-state">No hay coincidencias con tu búsqueda.</div>';
+            return;
+        }
+
+        container.innerHTML = '';
+        filtered.forEach(({ item, originalIndex }) => {
+            const qty = item.qty ?? 0;
+            const isOut = qty === -1;
+            const hasPositive = qty > 0;
+
+            const card = document.createElement('div');
+            card.className = 'card' + (isOut ? ' is-out' : (hasPositive ? ' has-qty' : ''));
+
+            const imgHtml = activeTab === 'catalog'
+                ? `<img src="${item.img || ''}" alt="" onerror="this.style.display='none'">`
+                : '';
+
+            const editBtnHtml = activeTab === 'pending'
+                ? `<button class="action-icon-btn btn-edit-item" title="Editar nombre o SKU">✎</button>`
+                : '';
+
+            card.innerHTML = `
+                ${imgHtml}
+                <div class="info">
+                    <div class="sku-row">
+                        <span class="sku">${item.sku}</span>
+                        ${isOut ? '<span class="badge-out">AGOTADO (-1)</span>' : ''}
+                    </div>
+                    <div class="name">${item.name}</div>
+                </div>
+                <div class="card-actions">
+                    <div class="qty-box">
+                        <label>Cant.</label>
+                        <input type="number" min="-1" class="qty-input ${isOut ? 'input-out' : ''}" placeholder="0" value="${qty === 0 ? '' : qty}">
+                    </div>
+                    <button class="action-icon-btn btn-out-item ${isOut ? 'active' : ''}" title="Marcar Agotado (-1)">🚫</button>
+                    ${editBtnHtml}
+                    <button class="action-icon-btn btn-del-item" title="Eliminar">✕</button>
+                </div>
+            `;
+
+            if (activeTab === 'catalog') {
+                const imgEl = card.querySelector('img');
+                if (imgEl) imgEl.addEventListener('click', () => openImagePreview(item.img));
+            }
+
+            // Cambio manual en input de cantidad
+            const input = card.querySelector('.qty-input');
+            input.addEventListener('input', (e) => {
+                const raw = e.target.value.trim();
+                const val = raw === '' ? 0 : parseInt(raw, 10);
+                sourceList[originalIndex].qty = isNaN(val) ? 0 : (val <= -1 ? -1 : val);
+                markUnsaved(true);
+                updateCounters();
+
+                const nowOut = sourceList[originalIndex].qty === -1;
+                const nowPos = sourceList[originalIndex].qty > 0;
+                card.classList.toggle('is-out', nowOut);
+                card.classList.toggle('has-qty', nowPos);
+                input.classList.toggle('input-out', nowOut);
+                card.querySelector('.btn-out-item').classList.toggle('active', nowOut);
+            });
+
+            // Botón rápido Agotado (-1)
+            card.querySelector('.btn-out-item').addEventListener('click', () => {
+                sourceList[originalIndex].qty = -1;
+                markUnsaved(true);
+                renderList();
+            });
+
+            // Editar pendiente
+            if (activeTab === 'pending') {
+                card.querySelector('.btn-edit-item').addEventListener('click', () => {
+                    openPendingModal(originalIndex);
+                });
+            }
+
+            // Eliminar item
+            card.querySelector('.btn-del-item').addEventListener('click', async () => {
+                if (!confirm(`¿Eliminar "${item.name}"?`)) return;
+                sourceList.splice(originalIndex, 1);
+                await persistStateToServer(true);
+                renderList();
+            });
+
+            container.appendChild(card);
         });
-
-        catalog = catalog.filter(i => !(i.sku === item.sku && i.name === item.name));
-        delete quantities[key];
-        saveQuantities();
-        renderList();
     }
 
+    // --- TABS Y BÚSQUEDA ---
+    document.getElementById('search-input').addEventListener('input', renderList);
+
+    document.getElementById('tab-catalog').addEventListener('click', (e) => {
+        activeTab = 'catalog';
+        e.target.classList.add('active');
+        document.getElementById('tab-pending').classList.remove('active');
+        renderList();
+    });
+
+    document.getElementById('tab-pending').addEventListener('click', (e) => {
+        activeTab = 'pending';
+        e.target.classList.add('active');
+        document.getElementById('tab-catalog').classList.remove('active');
+        renderList();
+    });
+
+    // --- MODAL PENDIENTES (CREAR / EDITAR) ---
+    const pendingModal = document.getElementById('pending-modal');
+
+    function openPendingModal(editIdx = null) {
+        editingPendingIndex = editIdx;
+        const titleEl = document.getElementById('pending-modal-title');
+        const nameInput = document.getElementById('pend-name');
+        const skuInput = document.getElementById('pend-sku');
+        const qtyInput = document.getElementById('pend-qty');
+
+        if (editIdx !== null) {
+            const item = pendientes[editIdx];
+            titleEl.textContent = '✎ Editar Producto Pendiente';
+            nameInput.value = item.name;
+            skuInput.value = item.sku;
+            qtyInput.value = item.qty ?? 0;
+        } else {
+            titleEl.textContent = '+ Nuevo Producto Pendiente';
+            nameInput.value = '';
+            skuInput.value = '';
+            qtyInput.value = 0;
+        }
+        pendingModal.style.display = 'flex';
+        nameInput.focus();
+    }
+
+    document.getElementById('btn-open-new-pending').addEventListener('click', () => openPendingModal(null));
+    document.getElementById('pend-cancel').addEventListener('click', () => pendingModal.style.display = 'none');
+
+    document.getElementById('pend-save').addEventListener('click', async () => {
+        const name = document.getElementById('pend-name').value.trim();
+        const sku = document.getElementById('pend-sku').value.trim() || 'PENDIENTE';
+        const rawQty = parseInt(document.getElementById('pend-qty').value, 10);
+        const qty = isNaN(rawQty) ? 0 : (rawQty <= -1 ? -1 : rawQty);
+
+        if (!name) {
+            alert('Escribe el nombre del producto.');
+            return;
+        }
+
+        if (editingPendingIndex !== null) {
+            pendientes[editingPendingIndex] = { name, sku, qty, img: '' };
+        } else {
+            pendientes.unshift({ name, sku, qty, img: '' });
+        }
+
+        pendingModal.style.display = 'none';
+        await persistStateToServer(true);
+        renderList();
+    });
+
+    // --- LIMPIAR Y RESETEAR ---
     document.getElementById('btn-clear-page').addEventListener('click', async () => {
-        if (!confirm('¿Borrar TODOS los productos de la página y dejarla en blanco?')) return;
+        if (!confirm('¿Borrar TODOS los productos del Catálogo Web y dejarlo en blanco? (Tus Pendientes no se borrarán)')) return;
 
         await fetch('/api/catalog', {
             method: 'DELETE',
@@ -512,137 +851,45 @@
         });
 
         catalog = [];
-        quantities = {};
-        saveQuantities();
-        document.getElementById('sync-info').textContent = 'Página en blanco';
+        document.getElementById('sync-info').textContent = 'Catálogo en blanco';
         renderList();
     });
 
-    function renderList() {
-        const container = document.getElementById('product-list');
-        const query = document.getElementById('search-input').value.toLowerCase().trim();
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+        const label = activeTab === 'catalog' ? 'Catálogo Web' : 'Pendientes';
+        if (!confirm(`¿Poner todas las cantidades de "${label}" en 0?`)) return;
 
-        updateCounters();
-
-        if (catalog.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <h3>Página en blanco</h3>
-                    <p>No hay productos cargados. Envíalos desde Tampermonkey en tu PC para empezar.</p>
-                </div>`;
-            return;
-        }
-
-        const filtered = catalog.filter(item => {
-            const key = item.sku + '||' + item.name;
-            const qty = quantities[key] || 0;
-            const matchesSearch = item.name.toLowerCase().includes(query) || item.sku.toLowerCase().includes(query);
-            const matchesFilter = filterMode === 'all' || qty > 0;
-            return matchesSearch && matchesFilter;
-        });
-
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="empty-state">No hay productos que coincidan con el filtro.</div>';
-            return;
-        }
-
-        container.innerHTML = '';
-        filtered.forEach(item => {
-            const key = item.sku + '||' + item.name;
-            const qty = quantities[key] || '';
-
-            const card = document.createElement('div');
-            card.className = 'card' + (qty > 0 ? ' has-qty' : '');
-            card.innerHTML = `
-                <img src="${item.img || ''}" alt="" onerror="this.style.visibility='hidden'">
-                <div class="info">
-                    <span class="sku">${item.sku}</span>
-                    <div class="name">${item.name}</div>
-                </div>
-                <div class="card-actions">
-                    <div class="qty-box">
-                        <label>Cantidad</label>
-                        <input type="number" inputmode="numeric" min="0" class="qty-input" placeholder="0" value="${qty}">
-                    </div>
-                    <button class="btn-del-item" title="Eliminar producto">✕</button>
-                </div>
-            `;
-
-            // Abrir imagen grande al tocarla
-            const imgEl = card.querySelector('img');
-            imgEl.addEventListener('click', () => openImagePreview(item.img));
-
-            // Input de cantidad
-            const input = card.querySelector('.qty-input');
-            input.addEventListener('input', (e) => {
-                const val = parseInt(e.target.value, 10);
-                if (!isNaN(val) && val > 0) {
-                    quantities[key] = val;
-                    card.classList.add('has-qty');
-                } else {
-                    delete quantities[key];
-                    card.classList.remove('has-qty');
-                }
-                saveQuantities();
-            });
-
-            // Botón X para borrar producto
-            card.querySelector('.btn-del-item').addEventListener('click', () => {
-                deleteSingleProduct(item, key);
-            });
-
-            container.appendChild(card);
-        });
-    }
-
-    document.getElementById('search-input').addEventListener('input', renderList);
-
-    document.getElementById('filter-all').addEventListener('click', (e) => {
-        filterMode = 'all';
-        e.target.classList.add('active');
-        document.getElementById('filter-counted').classList.remove('active');
+        const target = activeTab === 'catalog' ? catalog : pendientes;
+        target.forEach(item => item.qty = 0);
+        await persistStateToServer(true);
         renderList();
     });
 
-    document.getElementById('filter-counted').addEventListener('click', (e) => {
-        filterMode = 'counted';
-        e.target.classList.add('active');
-        document.getElementById('filter-all').classList.remove('active');
-        renderList();
-    });
-
-    document.getElementById('btn-reset').addEventListener('click', () => {
-        if (confirm('¿Poner todas las cantidades en 0?')) {
-            quantities = {};
-            saveQuantities();
-            renderList();
-        }
-    });
-
-    // Exportar PDF
+    // --- EXPORTAR PDF ---
     document.getElementById('btn-export').addEventListener('click', async () => {
-        const itemsToExport = [];
-        catalog.forEach(item => {
-            const key = item.sku + '||' + item.name;
-            const qty = quantities[key] || 0;
-            if (qty > 0) {
-                itemsToExport.push({
-                    sku: item.sku,
-                    name: item.name,
-                    qty: qty
-                });
-            }
-        });
+        // Primero guardamos automáticamente el estado actual en servidor
+        if (hasUnsavedChanges) {
+            await persistStateToServer(true);
+        }
+
+        const currentList = activeTab === 'catalog' ? catalog : pendientes;
+        const itemsToExport = currentList
+            .filter(item => (item.qty || 0) > 0 || item.qty === -1)
+            .map(item => ({
+                sku: item.sku,
+                name: item.name,
+                qty: item.qty
+            }));
 
         if (itemsToExport.length === 0) {
-            alert('Asigna una cantidad mayor a 0 a por lo menos un producto.');
+            alert('Asigna una cantidad (o marca como agotado -1) a por lo menos un producto.');
             return;
         }
 
         const btn = document.getElementById('btn-export');
         const notas = document.getElementById('notas-input').value.trim();
         btn.disabled = true;
-        btn.textContent = '⏳ Generando PDF...';
+        btn.textContent = '⏳ Generando...';
 
         try {
             const res = await fetch('/api/export-pdf', {
@@ -660,8 +907,9 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             const fecha = new Date().toISOString().slice(0, 10);
+            const prefix = activeTab === 'pending' ? 'Pendientes_Dumashe' : 'Inventario_Dumashe';
             a.href = url;
-            a.download = `Inventario_Dumashe_${fecha}.pdf`;
+            a.download = `${prefix}_${fecha}.pdf`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -670,7 +918,7 @@
             alert('Hubo un problema al descargar el PDF.');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `📄 Exportar PDF (<span id="btn-count">${itemsToExport.length}</span>)`;
+            btn.innerHTML = `📄 PDF (<span id="btn-count">${itemsToExport.length}</span>)`;
         }
     });
 
