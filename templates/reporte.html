@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 15mm 20mm 15mm;
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: 'DejaVu Sans', sans-serif;
+                font-size: 8pt;
+                color: #64748b;
+            }
+        }
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            font-size: 9.5pt;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #ff2688;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .brand h1 {
+            margin: 0;
+            font-size: 20pt;
+            color: #ff2688;
+            letter-spacing: 1px;
+        }
+        .brand p {
+            margin: 4px 0 0 0;
+            font-size: 9pt;
+            color: #64748b;
+        }
+        .meta {
+            text-align: right;
+            font-size: 8.5pt;
+            color: #475569;
+            line-height: 1.5;
+        }
+        .summary-boxes {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            flex: 1;
+        }
+        .box-label {
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+        }
+        .box-val {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #0f172a;
+            margin-top: 2px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #1e293b;
+            color: #ffffff;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 8.5pt;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 9pt;
+            vertical-align: middle;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .col-num { width: 35px; text-align: center; color: #64748b; }
+        .col-sku { width: 110px; font-weight: bold; color: #ff2688; }
+        .col-qty { width: 85px; text-align: center; font-weight: bold; font-size: 10pt; }
+        .notas {
+            margin-top: 20px;
+            padding: 10px 14px;
+            background: #fff0f6;
+            border-left: 4px solid #ff2688;
+            font-size: 8.5pt;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand">
+            <h1>DUMASHE</h1>
+            <p>Reporte de Control de Inventario</p>
+        </div>
+        <div class="meta">
+            <strong>Fecha:</strong> {{ fecha }}<br>
+            <strong>Origen:</strong> mayorista.dumashe.com
+        </div>
+    </div>
+
+    <div class="summary-boxes">
+        <div class="box">
+            <div class="box-label">Total Referencias</div>
+            <div class="box-val">{{ total_referencias }}</div>
+        </div>
+        <div class="box">
+            <div class="box-label">Unidades Totales en Stock</div>
+            <div class="box-val">{{ total_unidades }}</div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-num">#</th>
+                <th class="col-sku">SKU</th>
+                <th>Nombre del Producto</th>
+                <th class="col-qty">Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="col-num">{{ loop.index }}</td>
+                <td class="col-sku">{{ item.sku }}</td>
+                <td>{{ item.name }}</td>
+                <td class="col-qty">{{ item.qty }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if notas %}
+    <div class="notas">
+        <strong>Observaciones:</strong> {{ notas }}
+    </div>
+    {% endif %}
+</body>
+</html>
