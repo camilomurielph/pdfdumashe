@@ -23,51 +23,20 @@
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: flex-end;
             border-bottom: 3px solid #ff2688;
             padding-bottom: 12px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         .brand h1 {
             margin: 0;
-            font-size: 20pt;
-            color: #ff2688;
-            letter-spacing: 1px;
-        }
-        .brand p {
-            margin: 4px 0 0 0;
-            font-size: 9pt;
-            color: #64748b;
+            font-size: 18pt;
+            color: #1e293b;
         }
         .meta {
             text-align: right;
-            font-size: 8.5pt;
+            font-size: 9pt;
             color: #475569;
-            line-height: 1.5;
-        }
-        .summary-boxes {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 10px 14px;
-            flex: 1;
-        }
-        .box-label {
-            font-size: 7.5pt;
-            text-transform: uppercase;
-            color: #64748b;
-            font-weight: bold;
-        }
-        .box-val {
-            font-size: 14pt;
-            font-weight: bold;
-            color: #0f172a;
-            margin-top: 2px;
         }
         table {
             width: 100%;
@@ -90,9 +59,8 @@
         tr:nth-child(even) {
             background-color: #f8fafc;
         }
-        .col-num { width: 35px; text-align: center; color: #64748b; }
-        .col-sku { width: 110px; font-weight: bold; color: #ff2688; }
-        .col-qty { width: 85px; text-align: center; font-weight: bold; font-size: 10pt; }
+        .col-sku { width: 120px; font-weight: bold; color: #ff2688; }
+        .col-qty { width: 95px; text-align: center; font-weight: bold; font-size: 10pt; }
         .notas {
             margin-top: 20px;
             padding: 10px 14px;
@@ -106,39 +74,24 @@
 <body>
     <div class="header">
         <div class="brand">
-            <h1>DUMASHE</h1>
-            <p>Reporte de Control de Inventario</p>
+            <h1>Reporte de inventario</h1>
         </div>
         <div class="meta">
-            <strong>Fecha:</strong> {{ fecha }}<br>
-            <strong>Origen:</strong> mayorista.dumashe.com
-        </div>
-    </div>
-
-    <div class="summary-boxes">
-        <div class="box">
-            <div class="box-label">Total Referencias</div>
-            <div class="box-val">{{ total_referencias }}</div>
-        </div>
-        <div class="box">
-            <div class="box-label">Unidades Totales en Stock</div>
-            <div class="box-val">{{ total_unidades }}</div>
+            <strong>Fecha:</strong> {{ fecha }}
         </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th class="col-num">#</th>
                 <th class="col-sku">SKU</th>
                 <th>Nombre del Producto</th>
-                <th class="col-qty">Stock</th>
+                <th class="col-qty">Cantidad</th>
             </tr>
         </thead>
         <tbody>
             {% for item in items %}
             <tr>
-                <td class="col-num">{{ loop.index }}</td>
                 <td class="col-sku">{{ item.sku }}</td>
                 <td>{{ item.name }}</td>
                 <td class="col-qty">{{ item.qty }}</td>
