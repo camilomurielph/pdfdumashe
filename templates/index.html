@@ -110,23 +110,29 @@
         #search-input::placeholder { color: #64748b; }
         .filter-bar {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-top: 10px;
         }
         .filter-btn {
             flex: 1;
-            padding: 8px 10px;
+            padding: 8px 6px;
             border-radius: 6px;
             border: 1px solid #334155;
             background: #1e293b;
             color: #94a3b8;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
+            white-space: nowrap;
         }
         .filter-btn.active {
             background: #ff2688;
             border-color: #ff2688;
+            color: #fff;
+        }
+        .filter-btn.tab-out-btn.active {
+            background: #dc2626;
+            border-color: #dc2626;
             color: #fff;
         }
 
@@ -208,6 +214,14 @@
             font-weight: 800;
             color: #fca5a5;
             background: rgba(239, 68, 68, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .badge-source {
+            font-size: 10px;
+            font-weight: 700;
+            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.2);
             padding: 2px 6px;
             border-radius: 4px;
         }
@@ -495,8 +509,9 @@
     </div>
     <input type="search" id="search-input" placeholder="Buscar por nombre o SKU...">
     <div class="filter-bar">
-        <button class="filter-btn active" id="tab-catalog">Catálogo Web (<span id="count-all">0</span>)</button>
+        <button class="filter-btn active" id="tab-catalog">Catálogo (<span id="count-all">0</span>)</button>
         <button class="filter-btn" id="tab-pending">Pendientes (<span id="count-pending">0</span>)</button>
+        <button class="filter-btn tab-out-btn" id="tab-out">Agotados (<span id="count-out">0</span>)</button>
     </div>
 </header>
 
@@ -523,7 +538,7 @@
     let appPassword = localStorage.getItem(PASS_STORAGE_KEY) || '';
     let catalog = [];
     let pendientes = [];
-    let activeTab = 'catalog'; // 'catalog' | 'pending'
+    let activeTab = 'catalog'; // 'catalog' | 'pending' | 'out'
     let hasUnsavedChanges = false;
     let editingPendingIndex = null;
 
@@ -647,14 +662,36 @@
         if (e.target === lightbox) lightbox.style.display = 'none';
     });
 
+    // --- HELPER: OBTENER AGOTADOS DE AMBAS LISTAS ---
+    function getOutOfStockEntries() {
+        const entries = [];
+        catalog.forEach((item, idx) => {
+            if (item.qty === -1) {
+                entries.push({ item, source: 'catalog', originalIndex: idx });
+            }
+        });
+        pendientes.forEach((item, idx) => {
+            if (item.qty === -1) {
+                entries.push({ item, source: 'pending', originalIndex: idx });
+            }
+        });
+        return entries;
+    }
+
     // --- CONTADORES ---
     function updateCounters() {
+        const outEntries = getOutOfStockEntries();
         document.getElementById('count-all').textContent = catalog.length;
         document.getElementById('count-pending').textContent = pendientes.length;
+        document.getElementById('count-out').textContent = outEntries.length;
 
-        const currentList = activeTab === 'catalog' ? catalog : pendientes;
-        // Se exportan los productos con cantidad > 0 O marcados como agotados (-1)
-        const exportableCount = currentList.filter(i => (i.qty || 0) > 0 || i.qty === -1).length;
+        let exportableCount = 0;
+        if (activeTab === 'out') {
+            exportableCount = outEntries.length;
+        } else {
+            const currentList = activeTab === 'catalog' ? catalog : pendientes;
+            exportableCount = currentList.filter(i => (i.qty || 0) > 0 || i.qty === -1).length;
+        }
         document.getElementById('btn-count').textContent = exportableCount;
     }
 
@@ -667,21 +704,30 @@
         pendingToolbar.style.display = activeTab === 'pending' ? 'block' : 'none';
         updateCounters();
 
-        const sourceList = activeTab === 'catalog' ? catalog : pendientes;
+        let entries = [];
+        if (activeTab === 'catalog') {
+            entries = catalog.map((item, idx) => ({ item, source: 'catalog', originalIndex: idx }));
+        } else if (activeTab === 'pending') {
+            entries = pendientes.map((item, idx) => ({ item, source: 'pending', originalIndex: idx }));
+        } else {
+            entries = getOutOfStockEntries();
+        }
 
-        if (sourceList.length === 0) {
-            container.innerHTML = activeTab === 'catalog'
-                ? `<div class="empty-state"><h3>Catálogo en blanco</h3><p>Envía productos desde Tampermonkey en tu PC para empezar.</p></div>`
-                : `<div class="empty-state"><h3>Sin productos pendientes</h3><p>Usa el botón <b>"+ Nuevo Producto Manual"</b> para agregar referencias que aún no están en la web.</p></div>`;
+        if (entries.length === 0) {
+            if (activeTab === 'catalog') {
+                container.innerHTML = `<div class="empty-state"><h3>Catálogo en blanco</h3><p>Envía productos desde Tampermonkey en tu PC para empezar.</p></div>`;
+            } else if (activeTab === 'pending') {
+                container.innerHTML = `<div class="empty-state"><h3>Sin productos pendientes</h3><p>Usa el botón <b>"+ Nuevo Producto Manual"</b> para agregar referencias que aún no están en la web.</p></div>`;
+            } else {
+                container.innerHTML = `<div class="empty-state"><h3>Sin productos agotados</h3><p>Todo producto que marques con <b>🚫</b> o cantidad <b>-1</b> aparecerá aquí automáticamente.</p></div>`;
+            }
             return;
         }
 
-        const filtered = sourceList
-            .map((item, originalIndex) => ({ item, originalIndex }))
-            .filter(({ item }) =>
-                item.name.toLowerCase().includes(query) ||
-                item.sku.toLowerCase().includes(query)
-            );
+        const filtered = entries.filter(({ item }) =>
+            item.name.toLowerCase().includes(query) ||
+            item.sku.toLowerCase().includes(query)
+        );
 
         if (filtered.length === 0) {
             container.innerHTML = '<div class="empty-state">No hay coincidencias con tu búsqueda.</div>';
@@ -689,7 +735,8 @@
         }
 
         container.innerHTML = '';
-        filtered.forEach(({ item, originalIndex }) => {
+        filtered.forEach(({ item, source, originalIndex }) => {
+            const targetList = source === 'catalog' ? catalog : pendientes;
             const qty = item.qty ?? 0;
             const isOut = qty === -1;
             const hasPositive = qty > 0;
@@ -697,11 +744,15 @@
             const card = document.createElement('div');
             card.className = 'card' + (isOut ? ' is-out' : (hasPositive ? ' has-qty' : ''));
 
-            const imgHtml = activeTab === 'catalog'
-                ? `<img src="${item.img || ''}" alt="" onerror="this.style.display='none'">`
+            const imgHtml = (source === 'catalog' && item.img)
+                ? `<img src="${item.img}" alt="" onerror="this.style.display='none'">`
                 : '';
 
-            const editBtnHtml = activeTab === 'pending'
+            const sourceBadgeHtml = activeTab === 'out'
+                ? `<span class="badge-source">${source === 'catalog' ? 'Web' : 'Pendiente'}</span>`
+                : '';
+
+            const editBtnHtml = source === 'pending'
                 ? `<button class="action-icon-btn btn-edit-item" title="Editar nombre o SKU">✎</button>`
                 : '';
 
@@ -710,6 +761,7 @@
                 <div class="info">
                     <div class="sku-row">
                         <span class="sku">${item.sku}</span>
+                        ${sourceBadgeHtml}
                         ${isOut ? '<span class="badge-out">AGOTADO (-1)</span>' : ''}
                     </div>
                     <div class="name">${item.name}</div>
@@ -725,22 +777,25 @@
                 </div>
             `;
 
-            if (activeTab === 'catalog') {
-                const imgEl = card.querySelector('img');
-                if (imgEl) imgEl.addEventListener('click', () => openImagePreview(item.img));
-            }
+            const imgEl = card.querySelector('img');
+            if (imgEl) imgEl.addEventListener('click', () => openImagePreview(item.img));
 
             // Cambio manual en input de cantidad
             const input = card.querySelector('.qty-input');
             input.addEventListener('input', (e) => {
                 const raw = e.target.value.trim();
                 const val = raw === '' ? 0 : parseInt(raw, 10);
-                sourceList[originalIndex].qty = isNaN(val) ? 0 : (val <= -1 ? -1 : val);
+                targetList[originalIndex].qty = isNaN(val) ? 0 : (val <= -1 ? -1 : val);
                 markUnsaved(true);
                 updateCounters();
 
-                const nowOut = sourceList[originalIndex].qty === -1;
-                const nowPos = sourceList[originalIndex].qty > 0;
+                const nowOut = targetList[originalIndex].qty === -1;
+                if (activeTab === 'out' && !nowOut) {
+                    renderList();
+                    return;
+                }
+
+                const nowPos = targetList[originalIndex].qty > 0;
                 card.classList.toggle('is-out', nowOut);
                 card.classList.toggle('has-qty', nowPos);
                 input.classList.toggle('input-out', nowOut);
@@ -749,13 +804,13 @@
 
             // Botón rápido Agotado (-1)
             card.querySelector('.btn-out-item').addEventListener('click', () => {
-                sourceList[originalIndex].qty = -1;
+                targetList[originalIndex].qty = -1;
                 markUnsaved(true);
                 renderList();
             });
 
             // Editar pendiente
-            if (activeTab === 'pending') {
+            if (source === 'pending') {
                 card.querySelector('.btn-edit-item').addEventListener('click', () => {
                     openPendingModal(originalIndex);
                 });
@@ -764,7 +819,7 @@
             // Eliminar item
             card.querySelector('.btn-del-item').addEventListener('click', async () => {
                 if (!confirm(`¿Eliminar "${item.name}"?`)) return;
-                sourceList.splice(originalIndex, 1);
+                targetList.splice(originalIndex, 1);
                 await persistStateToServer(true);
                 renderList();
             });
@@ -776,19 +831,17 @@
     // --- TABS Y BÚSQUEDA ---
     document.getElementById('search-input').addEventListener('input', renderList);
 
-    document.getElementById('tab-catalog').addEventListener('click', (e) => {
-        activeTab = 'catalog';
-        e.target.classList.add('active');
-        document.getElementById('tab-pending').classList.remove('active');
+    function setActiveTab(tabName) {
+        activeTab = tabName;
+        document.getElementById('tab-catalog').classList.toggle('active', tabName === 'catalog');
+        document.getElementById('tab-pending').classList.toggle('active', tabName === 'pending');
+        document.getElementById('tab-out').classList.toggle('active', tabName === 'out');
         renderList();
-    });
+    }
 
-    document.getElementById('tab-pending').addEventListener('click', (e) => {
-        activeTab = 'pending';
-        e.target.classList.add('active');
-        document.getElementById('tab-catalog').classList.remove('active');
-        renderList();
-    });
+    document.getElementById('tab-catalog').addEventListener('click', () => setActiveTab('catalog'));
+    document.getElementById('tab-pending').addEventListener('click', () => setActiveTab('pending'));
+    document.getElementById('tab-out').addEventListener('click', () => setActiveTab('out'));
 
     // --- MODAL PENDIENTES (CREAR / EDITAR) ---
     const pendingModal = document.getElementById('pending-modal');
@@ -856,33 +909,49 @@
     });
 
     document.getElementById('btn-reset').addEventListener('click', async () => {
-        const label = activeTab === 'catalog' ? 'Catálogo Web' : 'Pendientes';
-        if (!confirm(`¿Poner todas las cantidades de "${label}" en 0?`)) return;
+        if (activeTab === 'out') {
+            if (!confirm('¿Quitar todos los productos de "Agotados" (poner sus cantidades en 0)?')) return;
+            catalog.forEach(item => { if (item.qty === -1) item.qty = 0; });
+            pendientes.forEach(item => { if (item.qty === -1) item.qty = 0; });
+        } else {
+            const label = activeTab === 'catalog' ? 'Catálogo Web' : 'Pendientes';
+            if (!confirm(`¿Poner todas las cantidades de "${label}" en 0?`)) return;
+            const target = activeTab === 'catalog' ? catalog : pendientes;
+            target.forEach(item => item.qty = 0);
+        }
 
-        const target = activeTab === 'catalog' ? catalog : pendientes;
-        target.forEach(item => item.qty = 0);
         await persistStateToServer(true);
         renderList();
     });
 
     // --- EXPORTAR PDF ---
     document.getElementById('btn-export').addEventListener('click', async () => {
-        // Primero guardamos automáticamente el estado actual en servidor
         if (hasUnsavedChanges) {
             await persistStateToServer(true);
         }
 
-        const currentList = activeTab === 'catalog' ? catalog : pendientes;
-        const itemsToExport = currentList
-            .filter(item => (item.qty || 0) > 0 || item.qty === -1)
-            .map(item => ({
+        let itemsToExport = [];
+        if (activeTab === 'out') {
+            itemsToExport = getOutOfStockEntries().map(({ item }) => ({
                 sku: item.sku,
                 name: item.name,
-                qty: item.qty
+                qty: -1
             }));
+        } else {
+            const currentList = activeTab === 'catalog' ? catalog : pendientes;
+            itemsToExport = currentList
+                .filter(item => (item.qty || 0) > 0 || item.qty === -1)
+                .map(item => ({
+                    sku: item.sku,
+                    name: item.name,
+                    qty: item.qty
+                }));
+        }
 
         if (itemsToExport.length === 0) {
-            alert('Asigna una cantidad (o marca como agotado -1) a por lo menos un producto.');
+            alert(activeTab === 'out'
+                ? 'No hay productos marcados como agotados (-1) para exportar.'
+                : 'Asigna una cantidad (o marca como agotado -1) a por lo menos un producto.');
             return;
         }
 
@@ -907,7 +976,9 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             const fecha = new Date().toISOString().slice(0, 10);
-            const prefix = activeTab === 'pending' ? 'Pendientes_Dumashe' : 'Inventario_Dumashe';
+            const prefix = activeTab === 'out'
+                ? 'Agotados_Dumashe'
+                : (activeTab === 'pending' ? 'Pendientes_Dumashe' : 'Inventario_Dumashe');
             a.href = url;
             a.download = `${prefix}_${fecha}.pdf`;
             document.body.appendChild(a);
