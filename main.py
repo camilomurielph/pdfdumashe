@@ -25,11 +25,12 @@ DATA_DIR = "data"
 CATALOG_FILE = os.path.join(DATA_DIR, "catalogo.json")
 os.makedirs(DATA_DIR, exist_ok=True)
 
-APP_PASSWORD = os.environ.get("APP_PASSWORD", "dumashe123")
+RAW_PASSWORDS = os.environ.get("APP_PASSWORD", "dumashe123")
+VALID_PASSWORDS = [p.strip() for p in RAW_PASSWORDS.split(",") if p.strip()]
 
 
 def verify_password(x_app_password: Optional[str] = Header(None)):
-    if x_app_password != APP_PASSWORD:
+    if not x_app_password or x_app_password.strip() not in VALID_PASSWORDS:
         raise HTTPException(status_code=401, detail="Contraseña incorrecta o no proporcionada")
 
 
@@ -79,11 +80,9 @@ def home():
     return template.render()
 
 
-@app.post("/api/login")
-def login(x_app_password: Optional[str] = Header(None)):
-    if x_app_password == APP_PASSWORD:
-        return {"status": "ok"}
-    raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+@app.post("/api/login", dependencies=[Depends(verify_password)])
+def login():
+    return {"status": "ok"}
 
 
 @app.get("/api/catalog", dependencies=[Depends(verify_password)])
@@ -166,7 +165,7 @@ def generate_pdf(payload: InventoryPayload):
     )
 
     pdf_bytes = HTML(string=html_content).write_pdf()
-    filename = f"Inventario_Dumashe_{now.strftime('%Y-%m-%d_%H%M')}.pdf"
+    filename = f"Inventario_Dumashe_{now.strftime('%Y-%m-%d_%HM')}.pdf"
 
     return Response(
         content=pdf_bytes,
